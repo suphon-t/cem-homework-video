@@ -84,7 +84,6 @@ class SVDScene(MovingCameraScene):
         ))
 
         # start revealing pieces
-        self.play(FadeIn(symbols[0]))
         self.play(transform_piece_from(pieces, 0, obj_u, obj_e, obj_vt))
         for idx in range(1, len(sigmas)):
             self.play(AnimationGroup(
