@@ -4,13 +4,13 @@ from manim import *
 SINGULAR_COLORS = [GREEN, RED, BLUE, MAROON, PURPLE]
 
 A = np.matrix([[1, 8, 5, 4],
+               # [9, 6, 1, 7],
                [4, 0, 7, 5],
                [6, 3, 2, 8]])
 
-U, sigmas, V = np.linalg.svd(A, full_matrices=True)
+U, sigmas, Vt = np.linalg.svd(A, full_matrices=True)
 E = np.zeros(A.shape)
 E[:len(sigmas), :len(sigmas)] = np.diag(sigmas)
-Vt = numpy.transpose(V)
 
 
 def matrix_a():
@@ -94,3 +94,10 @@ def pieces_box(pieces, to_idx):
 def calc_piece_product(idx):
     [si, ui, vti] = calc_piece(idx)
     return si * np.outer(ui, vti)
+
+
+def new_fade(mobject):
+    fade = FullScreenFadeRectangle()
+    fade.set_fill(BLACK, 0.75)
+    fade.replace(mobject, stretch=True)
+    return fade

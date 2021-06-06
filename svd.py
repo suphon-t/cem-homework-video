@@ -91,12 +91,11 @@ class SVDScene(MovingCameraScene):
                 transform_piece_from(pieces, idx, obj_u, obj_e, obj_vt),
             ))
 
-        sum_box = pieces_box(pieces, 0)
-        self.play(AnimationGroup(
-            FadeIn(sum_box),
-            FadeIn(sum_result),
-        ))
+        # Fade out everything but the first clause, and fade in sum result
+        top_fade = new_fade(group_a_eq_u_e_vt)
+        eq_fades = [new_fade(Group(symbols[idx], pieces[idx])) for idx in range(len(sigmas))]
+        self.play(FadeIn(Group(top_fade, *eq_fades[1:], sum_result)))
+
+        # Gradually reveal the clauses
         for idx in range(1, len(sigmas)):
-            self.play(AnimationGroup(
-                Transform(sum_box, pieces_box(pieces, idx))
-            ))
+            self.play(FadeOut(eq_fades[idx]))
