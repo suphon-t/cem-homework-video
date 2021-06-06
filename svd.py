@@ -69,7 +69,7 @@ class SVDScene(MovingCameraScene):
         pieces_eq.shift(DOWN)
 
         # pieces product
-        sum_result = DecimalMatrix(calc_piece_product(0))
+        [sum_result, step_tracker] = steps_matrix()
         sum_result.next_to(pieces_eq, direction=DOWN)
         sum_result.shift(DOWN)
 
@@ -94,8 +94,16 @@ class SVDScene(MovingCameraScene):
         # Fade out everything but the first clause, and fade in sum result
         top_fade = new_fade(group_a_eq_u_e_vt)
         eq_fades = [new_fade(Group(symbols[idx], pieces[idx])) for idx in range(len(sigmas))]
-        self.play(FadeIn(Group(top_fade, *eq_fades[1:], sum_result)))
+        self.play(FadeIn(Group(top_fade, *eq_fades[1:])))
+        self.wait()
+        self.play(FadeIn(sum_result))
 
-        # Gradually reveal the clauses
+        # Gradually reveal the clauses and animate the sum result
         for idx in range(1, len(sigmas)):
-            self.play(FadeOut(eq_fades[idx]))
+            self.wait()
+            self.play(AnimationGroup(
+                FadeOut(eq_fades[idx]),
+                step_tracker.animate.set_value(idx)
+            ))
+
+        self.play(FadeOut(top_fade))

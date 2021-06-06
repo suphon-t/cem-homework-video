@@ -1,4 +1,4 @@
-import numpy
+import math
 from manim import *
 
 SINGULAR_COLORS = [GREEN, RED, BLUE, MAROON, PURPLE]
@@ -101,3 +101,31 @@ def new_fade(mobject):
     fade.set_fill(BLACK, 0.75)
     fade.replace(mobject, stretch=True)
     return fade
+
+
+def result_sum_steps():
+    current = np.zeros(A.shape)
+    steps = []
+    for idx in range(len(sigmas)):
+        current = current + calc_piece_product(idx)
+        steps.append(current)
+    return steps
+
+
+def steps_matrix():
+    step_tracker = ValueTracker(0)
+    size = A.shape[0] * A.shape[1]
+    steps = result_sum_steps()
+    matrix = DecimalMatrix(steps[0])
+    steps = [step.reshape(size) for step in steps]
+    mobs = matrix.mob_matrix.reshape(size)
+    for idx in range(size):
+        mobs[idx].add_updater(lambda d, tmp=idx: d.set_value(interp_step(steps, tmp, step_tracker.get_value())))
+    return [matrix, step_tracker]
+
+
+def interp_step(steps, idx, value):
+    ps = steps[math.floor(value)][idx]
+    ns = steps[math.ceil(value)][idx]
+    alpha = value - math.floor(value)
+    return interpolate(ps, ns, alpha)
