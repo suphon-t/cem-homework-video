@@ -112,10 +112,10 @@ def result_sum_steps():
     return steps
 
 
-def steps_matrix():
+def steps_matrix(steps):
     step_tracker = ValueTracker(0)
-    size = A.shape[0] * A.shape[1]
-    steps = result_sum_steps()
+    shape = steps[0].shape
+    size = shape[0] * shape[1]
     matrix = DecimalMatrix(steps[0])
     steps = [step.reshape(size) for step in steps]
     mobs = matrix.mob_matrix.reshape(size)

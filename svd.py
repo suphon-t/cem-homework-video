@@ -71,13 +71,11 @@ class SVDScene(MovingCameraScene):
         pieces = get_pieces()
         symbols = pieces_sum_equation(pieces)
         pieces_eq = Group(*(pieces + symbols[1:]))
-        pieces_eq.next_to(group_a_eq_u_e_vt, direction=DOWN)
-        pieces_eq.shift(DOWN)
+        pieces_eq.next_to(group_a_eq_u_e_vt, direction=DOWN, buff=2)
 
         # pieces product
-        [sum_result, step_tracker] = steps_matrix()
-        sum_result.next_to(pieces_eq, direction=DOWN)
-        sum_result.shift(DOWN)
+        [sum_result, step_tracker] = steps_matrix(result_sum_steps())
+        sum_result.next_to(pieces_eq, direction=DOWN, buff=2)
 
         # position the camera and hide annotations
         all_group = Group(group_a_eq_u_e_vt, pieces_eq, sum_result)
