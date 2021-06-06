@@ -26,16 +26,19 @@ class SVDScene(MovingCameraScene):
         group_a_eq_u_e_vt = Group(obj_a, eq, obj_u, obj_e, obj_vt)
 
         # start from A
+        self.wait()
         self.camera.frame.move_to(a)
         self.play(Write(a))
 
         # reveal = U \Sigma V^T
+        self.wait()
         self.play(AnimationGroup(
             self.camera.frame.animate.move_to(a_eq_u_e_vt),
             Write(a_eq_u_e_vt[1:]),
         ))
 
         # reveal the matrices
+        self.wait()
         self.play(AnimationGroup(
             self.camera.frame.animate.scale(1.75).move_to(group),
             Transform(a, ba_text),
@@ -52,13 +55,16 @@ class SVDScene(MovingCameraScene):
         u_box = col_box(obj_u, 0)
         e_box = diag_box(obj_e, 0)
         vt_box = row_box(obj_vt, 0)
+        self.wait()
         self.play(FadeIn(Group(u_box, e_box, vt_box)))
         for idx in range(1, len(sigmas)):
+            self.wait()
             self.play(AnimationGroup(
                 Transform(u_box, col_box(obj_u, idx)),
                 Transform(e_box, diag_box(obj_e, idx)),
                 Transform(vt_box, row_box(obj_vt, idx)),
             ))
+        self.wait()
         self.play(FadeOut(Group(u_box, e_box, vt_box)))
 
         # prepare pieces
@@ -75,6 +81,7 @@ class SVDScene(MovingCameraScene):
 
         # position the camera and hide annotations
         all_group = Group(group_a_eq_u_e_vt, pieces_eq, sum_result)
+        self.wait()
         self.play(AnimationGroup(
             self.camera.frame.animate.scale(2/1.75).move_to(all_group),
             FadeOut(Group(ba, a)),
@@ -84,8 +91,10 @@ class SVDScene(MovingCameraScene):
         ))
 
         # start revealing pieces
+        self.wait()
         self.play(transform_piece_from(pieces, 0, obj_u, obj_e, obj_vt))
         for idx in range(1, len(sigmas)):
+            self.wait()
             self.play(AnimationGroup(
                 FadeIn(symbols[idx]),
                 transform_piece_from(pieces, idx, obj_u, obj_e, obj_vt),
@@ -94,6 +103,7 @@ class SVDScene(MovingCameraScene):
         # Fade out everything but the first clause, and fade in sum result
         top_fade = new_fade(group_a_eq_u_e_vt)
         eq_fades = [new_fade(Group(symbols[idx], pieces[idx])) for idx in range(len(sigmas))]
+        self.wait()
         self.play(FadeIn(Group(top_fade, *eq_fades[1:])))
         self.wait()
         self.play(FadeIn(sum_result))
