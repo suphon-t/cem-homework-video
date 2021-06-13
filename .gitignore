@@ -142,3 +142,4 @@ media/
 
 # Misc
 .DS_Store
+*.npy
