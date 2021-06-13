@@ -81,7 +81,7 @@ class SVDScene(MovingCameraScene):
         all_group = Group(group_a_eq_u_e_vt, pieces_eq, sum_result)
         self.wait()
         self.play(AnimationGroup(
-            self.camera.frame.animate.scale(2/1.75).move_to(all_group),
+            self.camera.frame.animate.scale(2.2/1.75).move_to(all_group),
             FadeOut(Group(ba, a)),
             FadeOut(Group(bu, u)),
             FadeOut(Group(be, e)),

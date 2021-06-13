@@ -56,14 +56,14 @@ def get_pieces():
     pieces = []
     for idx in range(len(sigmas)):
         [si, ui, vti] = calc_piece(idx)
-        si_mobj = DecimalNumber(si, num_decimal_places=1)
-        ui_mobj = DecimalMatrix(ui).next_to(si_mobj, RIGHT)
-        vti_mobj = DecimalMatrix(vti).next_to(ui_mobj, RIGHT)
+        ui_mobj = DecimalMatrix(ui)
+        si_mobj = DecimalMatrix([[si]]).next_to(ui_mobj, RIGHT)
+        vti_mobj = DecimalMatrix(vti).next_to(si_mobj, RIGHT)
         clr = SINGULAR_COLORS[idx]
-        si_mobj.set_color(clr)
         ui_mobj.set_column_colors(clr)
+        si_mobj.set_column_colors(clr)
         vti_mobj.set_row_colors(clr)
-        pieces.append(Group(si_mobj, ui_mobj, vti_mobj))
+        pieces.append(Group(ui_mobj, si_mobj, vti_mobj))
     return pieces
 
 
@@ -77,12 +77,13 @@ def pieces_sum_equation(pieces):
 
 
 def transform_piece_from(pieces, idx, mat_u, mat_e, mat_vt):
-    [si, ui, vti] = pieces[idx]
+    [ui, si, vti] = pieces[idx]
     return AnimationGroup(
         FadeIn(ui.get_brackets()),
+        FadeIn(si.get_brackets()),
         FadeIn(vti.get_brackets()),
-        TransformFromCopy(mat_e.mob_matrix[idx, idx], si),
         TransformFromCopy(mat_u.get_columns()[idx], ui.get_columns()[0]),
+        TransformFromCopy(mat_e.mob_matrix[idx, idx], si.mob_matrix[0, 0]),
         TransformFromCopy(mat_vt.get_rows()[idx], vti.get_rows()[0]),
     )
 
