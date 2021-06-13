@@ -104,7 +104,10 @@ class SVDScene(MovingCameraScene):
         self.wait()
         self.play(FadeIn(Group(top_fade, *eq_fades[1:])))
         self.wait()
-        self.play(FadeIn(sum_result))
+        self.play(AnimationGroup(
+            FadeIn(sum_result.get_brackets()),
+            LaggedStart(*[FadeIn(mobj) for mobj in sum_result.mob_matrix.reshape(-1)], lag_ratio=0.05)
+        ))
 
         # Gradually reveal the clauses and animate the sum result
         for idx in range(1, len(sigmas)):
@@ -114,4 +117,4 @@ class SVDScene(MovingCameraScene):
                 step_tracker.animate.set_value(idx)
             ))
 
-        self.play(FadeOut(top_fade))
+        self.wait()
