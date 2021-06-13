@@ -17,6 +17,7 @@ class ImageCompressionScene(MovingCameraScene):
         orig_group = Group(orig, orig_text, orig_size)
         self.camera.frame.move_to(orig_group)
         self.play(FadeIn(orig_group))
+        self.wait()
 
         k_tracker = ValueTracker(1)
         comp_image = scale_image(construct_image(1))
@@ -35,6 +36,7 @@ class ImageCompressionScene(MovingCameraScene):
         comp_text.add_updater(lambda d: update_text(d, k_tracker, comp))
         comp_size.add_updater(lambda d: update_size(d, k_tracker, unscaled, comp_text))
 
+        self.wait()
         self.play(k_tracker.animate.set_value(10))
         self.wait()
         self.play(k_tracker.animate.set_value(20))
